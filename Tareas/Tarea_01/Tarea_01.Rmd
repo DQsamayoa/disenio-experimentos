@@ -10,7 +10,7 @@ date: "Febrero 19, 2019"
 output:
   pdf_document:
     toc: false
-    number_sections: false
+    number_sections: true
     fig_caption: true
     highlight: kate
     df_print: kable
@@ -33,3 +33,88 @@ library(grid)
 library(kableExtra)
 library(latex2exp)
 ```
+
+
+# Reconocimiento del problema.
+
+> "Para dimensionar la importancia que tienen las escuelas rurales en México, basta mencionar que, de acuerdo a cifras oficiales, casi un 56% de los preescolares, un 58% de las primarias, un 57% de las secundarias y un 30% de los establecimientos de media superior existentes durante el ciclo escolar 2013-2014, se ubicaban en localidades menores a 2500 habitantes (INEE, 2015, p. 66). criterio que –hay que recordar– es el que usa el INEGI para definir a una población rural. A estos planteles asisten casi 7 millones de alumnos de todas las entidades federativas del país^[https://educacion.nexos.com.mx/?p=378]".
+
+> "Para el caso de alumnos que acuden  a escuelas rurales multigrado; es decir, en donde un maestro atiende a estudiantes de más de un grado escolar; cabe señalar que, durante el ciclo escolar ya mencionado,  esa modalidad constituyó un 53% de las escuelas preescolares del país, un 51% de las primarias y un 25.4% de las telesecundarias (inee, 2015, p. 305)^[https://educacion.nexos.com.mx/?p=378]".
+
+
+# Definir factores o niveles
+
+
+# Unidad experimental
+
+
+# Variable de respuesta
+
+
+# Elección del diseño experimental
+
+
+# Determinación del número de repeticiones
+Debido a que la unidad experimental son las escuelas, idealmente nos gustaría que todas las escuelas participarán. Pero debido a que en la práctica esto puede llegar a ser prohibitivo en términos de costos y logística. Por tal motivo, se buscará tener 5 u.e para cada uno de los tratamientos mencionados previamente^[Se buscó información sobre el número de escuelas rurales en México, pero no se encontró dicha información como para calcular un tamaño muestral. Se encontró https://www.inee.edu.mx/portalweb/informe2018/04_informe/capitulo_0502.html pero no indica qué es lo que se entiende por primaria general, indigena y comunitaria. Esto es, ¿cuáles caen dentro de la categoría de primaria rural?].
+
+Se sabe que el error experimental puede ser originado por las siguientes causas:
+
+1. **Variacion natural entre u.e.**
+    Podemos minimizar esta fuente de error al aleatorizar la selección de los tratamientos para cada una de las u.e. con lo cual variables como contexto social violeto o fragil, pobreza familiar y dificultades de acceso a la escuela.
+    En dado caso, se buscaría una aleatorización por bloque. Donde el bloque quedaría definido por el nivel socioeconómico de la zona en la que se localiza cada escuela (unidad experimental).
+    
+2. **Variabilidad en la medicion de la respuesta**
+    Se buscará siempre obtener la medición de absentismo a partir de las faltas escolares registradas en la lista de asistencia y considerar aquellas que tengas algún tipo de justificante (e.g. algún justificante médico).
+    
+3. **Incapacidad de reproducir las condiciones de los tratamientos exactamente de una u.e. a otra**
+    Se buscará minimizar esta fuente de error mediante los seguimientos mensuales para tratar de mantener un apego a cada uno de los tratamientos durante todo el estudio.
+    
+4. **Interaccion de tratamientos y u.e**
+    Esta parte la tratamos de minimizar al determinar cada escuela como u.e. Sin embargo, no podemos de controlar del todo esta interacción ya que pueden existir familiares/amigos que perteneezcan a diferentes u.e. pero que interactuen entre si fuera de la escuela.
+
+5. **Cualquier otro factor externo que afecte las características medidas**
+    No existe mucho que se pueda hacer en este caso ya que son cuestiones externas/ajenas al estudio que probablemtne no se previeron.
+
+# Hacer el experimento y colectar los datos
+Se buscará dar seguimiento durante dos periodos escolares completos. Esto es, desde Agosto 2019 hasta Julio 2021. De esta forma se podrán recolectar datos duran 24 meses.
+
+En la primera visita se propone generar un perfil completo de los estudiantes (submuestras) en cada una de las escuelas (unidad experimental) de tal forma que se conocerá información como:
+
+- Contexto social al inicio del estudio
+- Nivel de pobreza familiar al inicio del estudio
+- Dificultades de acceso a la escuela al inicio del estudio
+- Grado escolar al inicio del estudio
+- Sexo
+- Edad
+- Tamaño del núcleo familiar al inicio del estudio
+- Número de hermanos en edad escolar al inicio del estudio
+- Número de hermanos en la misma escuela (unidad experimental) al inicio del estudio
+- Número de hermanos en otra escuela (unidad experimental) al inicio del estudio
+
+Se propone realizar visitas de seguimiento mensual en cada una de las escuelas (unidad experimental) con el objetivo de recbar información como el apego al tratamiento de los alumnos (submuestra), así como entrevistas con los profesores para identificar problemas de ausentismo con los laumnos.
+
+Al finalizar los 24 meses, se realizará otro perfil completo de los estudiantes (submuestra) donde se conocerá información como:
+
+- Contexto social al final del estudio
+- Nivel de pobreza familiar al final del estudio
+- Dificultades de acceso a la escuela al final del estudio
+- Grado escolar al final del estudio
+- Tamaño del núcleo familiar al final del estudio
+- Número de hermanos en edad escolar al final del estudio
+- Número de hermanos en la misma escuela (unidad experimental) al final del estudio
+- Número de hermanos en otra escuela (unidad experimental) al inicio del estudio
+
+Cabe destacar que esta última parte tendrá un sesgo al tener únicamente información de estudiantes que abandonaron la escuela en el transcurso del estudio.
+
+# Efectuar el análisis estadístico
+Con la información recabada previamente, se procederá a generar un estadístico que indique de forma mensual la proporción de absentismo en cada una de las escuelas (unidades experimentales).
+
+También se podrá calcular este estadístico desglosado por cada una de las variables obtenidas en las entrevistas iniciales/finales del estudio.
+
+# Obtención de conclusiones
+
+Como primer objetivo del estudio será decidir si existe alguna diferencia significativa entre los factores definidos.
+
+Como segundo objetivo, se buscará determinar si existen diferencias significativas entre los factores definidos a partir del estadístico de absentismo desglosado por cada una de las variables definidas en las entrevistas/finales del estudio.
+
+Lo anterior ayudará a determinar si existen grupos de alto riesgo de entre toda la población estudiada o determinar si hay factores que tienen un mejor impacto en ciertos grupos de las submuestras.
