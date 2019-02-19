@@ -37,22 +37,23 @@ library(latex2exp)
 
 # Reconocimiento del problema.
 
+En ciertas comunidades rurales se observan altas tasas de absentismo escolar. Se sabe que son diversas las causas de este problema, entre ellas destacan las siguientes: contexto social violento o frágil, dificultades de acceso a la escuela, desnutrición y enfermedades digestivas contagiosas. Por ello, un grupo de investigación se pregunta si la acción de dos tratamientos (uno contra la desnutrición y otro contra las enfermedades digestivas contagiosas) o su interacción pueden tener efectos de disminución sobre el absentismo escolar.
+
 > "Para dimensionar la importancia que tienen las escuelas rurales en México, basta mencionar que, de acuerdo a cifras oficiales, casi un 56% de los preescolares, un 58% de las primarias, un 57% de las secundarias y un 30% de los establecimientos de media superior existentes durante el ciclo escolar 2013-2014, se ubicaban en localidades menores a 2500 habitantes (INEE, 2015, p. 66). criterio que –hay que recordar– es el que usa el INEGI para definir a una población rural. A estos planteles asisten casi 7 millones de alumnos de todas las entidades federativas del país^[https://educacion.nexos.com.mx/?p=378]".
 
 > "Para el caso de alumnos que acuden  a escuelas rurales multigrado; es decir, en donde un maestro atiende a estudiantes de más de un grado escolar; cabe señalar que, durante el ciclo escolar ya mencionado,  esa modalidad constituyó un 53% de las escuelas preescolares del país, un 51% de las primarias y un 25.4% de las telesecundarias (inee, 2015, p. 305)^[https://educacion.nexos.com.mx/?p=378]".
 
-
 # Definir factores o niveles
-
+Se definen dos factores: una nueva formula de nutrientes (factor 1) y un medicamento para ciertos parásitos (factor 2) que se incorpora al desayuno escolar. Por lo tanto, tenemos cuatro tratamientos: 1) desayuno escolar fortificado nutricionalmente y con medicamento añadido, 2) desayuno escolar con nueva fórmula nutritiva pero sin medicamento, 3) desayuno escolar usual con medicamento y 4) desayuno ordinario (tratamiento de control).
 
 # Unidad experimental
-
+La unidad experimental es el alumnado agregado de cada una de las escuelas. Mientras que las submuestras son los alumnos individualmente (unidades observacionales más elementales). En este caso el efecto del tratamiento de un alumno ante enfermedades digestivas puede tener externalidades positivas en el resto de la escuela (por ello, definimos la unidad experimental como la escuela o alumnado agregado).
 
 # Variable de respuesta
-
+Tasa de absentismo escolar diaria. Suponiendo que no tenemos limitaciones logísticas ni de recursos, podríamos recopilar la información diaria de absentismo en cada escuela y comparar posteriormente diferentes medidas (por ejemplo, media y varianza mensual de absentismo en cada escuela) y tendencia de los distintos tratamientos (esto podría realizarse durante algunos meses o años).
 
 # Elección del diseño experimental
-
+Tasa de absentismo escolar diaria. Suponiendo que no tenemos limitaciones logísticas ni de recursos, podríamos recopilar la información diaria de absentismo en cada escuela y comparar posteriormente diferentes medidas (por ejemplo, media y varianza mensual de absentismo en cada escuela) y tendencia de los distintos tratamientos (esto podría realizarse durante algunos meses o años).
 
 # Determinación del número de repeticiones
 Debido a que la unidad experimental son las escuelas, idealmente nos gustaría que todas las escuelas participarán. Pero debido a que en la práctica esto puede llegar a ser prohibitivo en términos de costos y logística. Por tal motivo, se buscará tener 5 u.e para cada uno de los tratamientos mencionados previamente^[Se buscó información sobre el número de escuelas rurales en México, pero no se encontró dicha información como para calcular un tamaño muestral. Se encontró https://www.inee.edu.mx/portalweb/informe2018/04_informe/capitulo_0502.html pero no indica qué es lo que se entiende por primaria general, indigena y comunitaria. Esto es, ¿cuáles caen dentro de la categoría de primaria rural?].
