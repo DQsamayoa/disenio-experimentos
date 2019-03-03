@@ -71,19 +71,115 @@ Una franquicia quiere determinar si existe diferencia entre la satisfacción de 
 datos4 <- tibble(f1 = c(6.721351,  6.323979,  4.128115,  9.593806, 11.176376,  5.460104, 2.517744,  9.186292,  4.235253, 8.824826,  5.568107,  6.794284, 5.670497,  8.418545,  5.995717),
                  f2 = c(8.3162646,  2.8591867, 12.9495849,  5.5420510,  3.8361638,  1.1963828,  4.8126178,  1.8920791, 6.1332265, 10.1599013, 5.9033151,  0.5051285,  0.4907579,  4.6517146,  7.0236920))
 
+datos <- datos4
+
 datos4 %>% 
   knitr::kable(format = "latex", booktabs = TRUE, longtable = TRUE, linesep = "",
                #escape = FALSE, #digits = 2,
                caption = "Promedio de satisfacción de los clientes por establecimiento.",
                col.names = c("Franquiciatario 1", "Franquiciatario 2")) %>% 
   kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) %>% 
-  kableExtra::footnote(general = "Donde 0 es completamente insatisfecho y 10 completamente satisfecho",
+  kableExtra::footnote(general = "Donde 0 es completamente insatisfecho y 15 completamente satisfecho",
                        general_title = "Nota: ", threeparttable = TRUE)
 ```
 
 - Escribe la hipótesis nula y la hipótesis alternativa
+
+Consideremos como $\mu_i$ la media de satisfacción de los clientes en los establecimeintos del franquiciatario $i$, $i = 1, 2$. Entonces la hipótesis nula $\left( \mathrm{H}_0 \right)$ y la hipótesis alternativa $\left( \mathrm{H}_a \right)$ quedan como sigue:
+\begin{align*}
+\mathrm{H}_0 : \mu_1 - \mu_2 = 0 \qquad \text{v.s.} \qquad \mathrm{H}_a : \mu_1 - \mu_2 \neq 0
+\end{align*}
+
 - Realiza la prueba de hipótesis correspondiente
+
+Procedemos a graficar las distribuciones muestrales de los datos para tener una noción sobre que tan "diferentes" pueden llegar a ser.
+
+```{r}
+datos %>%
+  gather(key = tipo, value = valor, c(f1, f2)) %>% 
+  ggplot(aes(x = valor, color = tipo)) +
+  geom_density() +
+  labs(title = "Distribución muestral de niveles de satisfacción en los establecimientos",
+       x = "Nivel de satisfacción",
+       y = "Densidad") +
+  scale_x_continuous(breaks = seq(from = 0, to = 15, by = 1)) +
+  scale_color_manual(name = "Franquiciatario", labels = c(1, 2), values = c("steelblue", "firebrick")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.position = "top")
+```
+
+
+Primero, se procede a realizar una prueba de hipótesis para la igualdad de varianzas (ya que necesitamos saber si la comparación de las medias se realizará con varianzas desconocidas iguales o distintas),
+
+El planteamiento de hipótesis para igualdad de varianzas está dado por:
+\begin{align*}
+\mathrm{H}_0 : \dfrac{\sigma_y^2}{\sigma_x^2} = 1 \qquad \text{v.s.} \qquad \mathrm{H}_a : \dfrac{\sigma_y^2}{\sigma_x^2} \neq 1
+\end{align*}
+donde la región de rechazo está dada por
+\begin{align*}
+C = \left\lbrace x \in X \left| \left( \dfrac{\dfrac{1}{n_1} \sum_{i = 1}^{n_1} (y_i - \mu_y)^2}{\dfrac{1}{n_2} \sum_{i = 1}^{n_2} (x_i - \mu_x)^2} \right) > F^{1 - \nicefrac{\alpha}{2}}_{(n_1-1, n_2-1)} \right. \right\rbrace
+\end{align*}
+donde $\alpha = 0.1$ para una confianza del $90\%$ y $n_1 = n_2 = `r nrow(datos4)`$.
+
+Calculando el estadístico se tiene que .
+```{r, echo = TRUE}
+alpha <- 0.1
+
+n1 <- nrow(datos)
+n2 <- nrow(datos)
+
+est.f <- qf(1 - alpha, df1 = n1 - 1, df2 = n2 - 1)
+```
+obteniendo así un valor de $F^{1-\nicefrac{\alpha}{2}}_{(n_1-1, n_2-1)} = `r est.f`$.
+
+Realizando los cálculos para la región de rechazo, se obtiene que 
+```{r, echo = TRUE}
+library(tidyverse)
+
+x <- datos %>% 
+     pull(f1)
+y <- datos %>% 
+     pull(f2)
+
+var_f1 <- sum((y - mean(y))^2)/n1
+var_f2 <- sum((x - mean(x))^2)/n2
+
+f <- var_f1/var_f2
+```
+\begin{align*}
+\left( \dfrac{\dfrac{1}{n_1} \sum_{i = 1}^{n_1} (y_i - \mu_y)^2}{\dfrac{1}{n_2} \sum_{i = 1}^{n_2} (x_i - \mu_x)^2} \right) = `r f`
+\end{align*}
+
+En este caso observamos que:
+\begin{align*}
+`r f` = \left( \dfrac{\dfrac{1}{n_1} \sum_{i = 1}^{n_1} (y_i - \mu_y)^2}{\dfrac{1}{n_2} \sum_{i = 1}^{n_2} (x_i - \mu_x)^2} \right) > F^{1-\nicefrac{\alpha}{2}}_{(n_1-1, n_2-1)} = `r est.f`
+\end{align*}
+por lo tanto se rechaza la hipótesis nula de que ambas poblaciones tienen varianza igual. Es decir, consideramos que las poblaciones (establecimientos de franquiciatario 1 y establecimientos de franquiciatario 2) tienen varianza distinta.
+
+Con lo anterior, se procede a realizar una prueba de hipótesis bilateral (de dos colas), para las medias de ambas poblaciones (establecimientos de franquiciatario 1 y establecimientos de franquiciatario 2).
+
+```{r, echo = TRUE}
+test4 <- t.test(x, y, alternative = "two.sided", paired = FALSE,
+                conf.level = 0.9, var.equal = FALSE, conf.int = TRUE)
+
+test4
+```
+
+En este caso observamos que $\mathrm{p-value} > 0.1 = \alpha$
+
 - Construye el intervalo de confianza para la diferencia de medias usando un nivel de confianza de $90\%$
+
+El intervalo de confianza está dado por:
+```{r, echo = TRUE}
+test4$conf.int
+```
+
+```{r}
+conf_int <- test4$conf.int
+```
+
+En este caso observamos que $0 \in \left( `r round(conf_int[1], 2)`, `r round(conf_int[2], 2)` \right)$
+
 - Concluye
 
-
+Lo anterior nos indica que, con una cofianza del $90\%$, podemos afirmar que el nivel de satisfacción, en promedio, que proporcionan los establecimientos de ambos franquiciatarios es el mismo.
