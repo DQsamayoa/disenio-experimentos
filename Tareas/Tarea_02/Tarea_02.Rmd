@@ -1,0 +1,89 @@
+---
+title: "Métodos de diseño y Análisis de Experimentos"
+subtitle: "Tarea 02"
+author:
+  - "Rivera Torres Francisco de Jesús"
+  - "Rodríguez Maya Jorge Daniel"
+  - "Samayoa Donado Víctor Augusto"
+  - "Trujillo Bariios Georgina"
+date: "Marzo 05, 2019"
+output:
+  pdf_document:
+    toc: false
+    number_sections: true
+    fig_caption: true
+    highlight: kate
+    df_print: kable
+    includes:
+      in_header: tex/header.tex
+fontsize: 11pt
+documentclass: article
+classoption: twoside
+fig_align: "center"
+---
+
+```{r setup, include = FALSE, eval = TRUE}
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, fig.height = 3)
+
+# Se cargan las librerias a utilizar
+library(tidyverse)
+library(readxl)
+library(scales)
+library(grid)
+library(kableExtra)
+library(latex2exp)
+```
+
+
+# Ejercicio 1
+Se sabe que la pagina web de una famosa tienda departamental tiene un tiempo de carga en segundos que se distribuye Normal  $\left(\mu = 5, \sigma^2 = 4 \right)$
+
+- Calcula y grafica la probabilidad de que la página tarde entre 4 y 6 segundos en cargar.
+- Calcula y grafica la probabilidad de que la página cargue máximo en 4 segundos.
+- Calcula y grafica la probabilidad de que la página tarde 6 segundos o más en cargar.
+- Calcula y grafica el mínimo que tarda en cargar la página el $5\%$ de las veces que carga mas lenta.
+- Calcula y grafica cuál es el máximo que tarda en cargar la página el $10\%$ de las veces que lo hace más rápido.
+
+
+# Ejercicio 2
+Teniendo $\mathrm{T}$ una variable aleatoria t-student centrada en $0$ y con $13 \mathrm{gl}$.
+
+- Calcula y grafica la probabilidad de que T este en el intervalo $\left[-1, 1 \right]$
+- Calcula y grafica la probabilidad de que T sea menor o igual a $2.16$
+- Calcula y grafica la probabilidad de que T sea igual o mayor a $2.16$
+- Calcula y grafica la probabilidad de que T sea menor o igual a $-2.16$
+- Calcula y grafica la probabilidad de que T sea igual o mayor a $-2.16$
+
+
+# Ejercicio 3
+Teniendo una variable aleatoria $Q$ que se distribuye $\mathrm{F}$ con parámetros $\left(4, 20 \right)$
+
+- Calcula y grafica la probabilidad de que $Q$ este en el intervalo $\left[ 3, 4 \right]$
+- Calcula y grafica la probabilidad de que $Q$ sea 3 o menor
+- Calcula y grafica la probabilidad de que $Q$ sea 4 o mayor
+- Calcula y grafica el percentil $0.95$ de $Q$
+- Calcula y grafica el percentil $0.5$ de $Q$
+
+# Ejercicio 4
+Una franquicia quiere determinar si existe diferencia entre la satisfacción de los clientes en los establecimientos de dos de sus franquiciatarios y para ello recolecta datos en 15 establecimientos de cada uno:
+
+```{r}
+datos4 <- tibble(f1 = c(6.721351,  6.323979,  4.128115,  9.593806, 11.176376,  5.460104, 2.517744,  9.186292,  4.235253, 8.824826,  5.568107,  6.794284, 5.670497,  8.418545,  5.995717),
+                 f2 = c(8.3162646,  2.8591867, 12.9495849,  5.5420510,  3.8361638,  1.1963828,  4.8126178,  1.8920791, 6.1332265, 10.1599013, 5.9033151,  0.5051285,  0.4907579,  4.6517146,  7.0236920))
+
+datos4 %>% 
+  knitr::kable(format = "latex", booktabs = TRUE, longtable = TRUE, linesep = "",
+               #escape = FALSE, #digits = 2,
+               caption = "Promedio de satisfacción de los clientes por establecimiento.",
+               col.names = c("Franquiciatario 1", "Franquiciatario 2")) %>% 
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) %>% 
+  kableExtra::footnote(general = "Donde 0 es completamente insatisfecho y 10 completamente satisfecho",
+                       general_title = "Nota: ", threeparttable = TRUE)
+```
+
+- Escribe la hipótesis nula y la hipótesis alternativa
+- Realiza la prueba de hipótesis correspondiente
+- Construye el intervalo de confianza para la diferencia de medias usando un nivel de confianza de $90\%$
+- Concluye
+
+
