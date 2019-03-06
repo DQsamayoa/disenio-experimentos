@@ -39,11 +39,138 @@ library(latex2exp)
 Se sabe que la pagina web de una famosa tienda departamental tiene un tiempo de carga en segundos que se distribuye Normal  $\left(\mu = 5, \sigma^2 = 4 \right)$
 
 - Calcula y grafica la probabilidad de que la página tarde entre 4 y 6 segundos en cargar.
+
+```{r}
+
+# Se definen parámetros
+mu<- 5
+sigma<- 2
+
+
+#Calcula y grafica a)
+
+x1<-4
+x2<-6
+
+#Gráfica de la distribución normal.
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+#El área bajo la curva de la probabilidad que la página tarde entre 4 y 6 seg 
+# en cargar
+
+cord.c = c(x1, seq(x1,x2,0.01),x2)
+cord.d = c(0, dnorm(seq(x1,x2,0.01), mu, sigma), 0)
+polygon(cord.c, cord.d, col = "red")
+
+#La probabilidad de que la página tarde entre 4 y 6 s en cargar
+#P
+x<- pnorm(6, mu, sigma)- pnorm(4, mu, sigma)
+x
+
+```
+
+De esta manera la probabilidad de que la página tarde en cargar entre 4 y 6 
+segundos es de $P(4 \leq x \leq6) = 0.3829$
+  
+  
 - Calcula y grafica la probabilidad de que la página cargue máximo en 4 segundos.
+
+```{r}  
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+
+cord.a = c(0, seq(min(range),x1,0.01),x1)
+cord.b = c(0, dnorm(seq(min(range),x1,0.01), mu, sigma), 0)
+polygon(cord.a, cord.b, col = "blue")
+
+#Calculando la probabilidad P(x <= 4)
+pnorm(4, mu, sigma)
+
+```
+
+La probabilidad de que tarde máximo 4 segundos es
+$P(x \leq 4) = 0.308$
+  
+
 - Calcula y grafica la probabilidad de que la página tarde 6 segundos o más en cargar.
+
+```{r}
+#Probabilidad de que tarde 6 seg
+#Gráfica de la distribución normal.
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+#El área bajo la curva de la probabilidad que la página tarde entre 4 y 6 seg 
+# en cargar
+
+cord.c = c(0, seq(min(range),x2,0.01),x2)
+cord.d = c(0, dnorm(seq(min(range),x2,0.01), mu, sigma), 0)
+polygon(cord.c, cord.d, col = "red")
+
+#La probabilidad de que la página tarde entre 4 y 6 s en cargar
+#P
+s<- 1- pnorm(6, mu, sigma)
+s
+
+```
 - Calcula y grafica el mínimo que tarda en cargar la página el $5\%$ de las veces que carga mas lenta.
+
+```{r}
+
+#Calcular el mínimo que tarda en cargar el 5% de las veces que carga más lento 
+  
+qnorm(0.95, mu, sigma)
+
+z = 8.2
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+
+cord.a = c(0, seq(min(range), z ,0.01),z)
+cord.b = c(0, dnorm(seq(min(range),z ,0.01), mu, sigma), 0)
+polygon(cord.a, cord.b, col = "green")
+
+1 - pnorm(8.2, mu, sigma)
+
+
+```
+
+Por lo que la probabilidad es $P(x=8.2)=$ `r 1 - pnorm(8.2, mu, sigma)`.
+
 - Calcula y grafica cuál es el máximo que tarda en cargar la página el $10\%$ de las veces que lo hace más rápido.
 
+```{r}
+
+#Calcular el máximo 
+
+qnorm(0.10, mu, sigma)
+
+
+z2 = 2.4
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+
+cord.a = c(0, seq(min(range), z2 ,0.01),z2)
+cord.b = c(0, dnorm(seq(min(range),z2 ,0.01), mu, sigma), 0)
+polygon(cord.a, cord.b, col = "green")
+
+pnorm(2.4, mu, sigma)
+
+
+```
 
 # Ejercicio 2
 Teniendo $\mathrm{T}$ una variable aleatoria t-student centrada en $0$ y con $13 \mathrm{gl}$.
@@ -136,10 +263,56 @@ legend("topright", legend = paste0("Prob = ", round(prob, 4)))
 Teniendo una variable aleatoria $Q$ que se distribuye $\mathrm{F}$ con parámetros $\left(4, 20 \right)$
 
 - Calcula y grafica la probabilidad de que $Q$ este en el intervalo $\left[ 3, 4 \right]$
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+prob <- pf(4,4,20)-pf(3,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "P(3 < X < 4)") #función de prob
+x <- seq(3, 4, 0.01)
+polygon(c(3, x, 4), c(0, df(x, 4, 20), 0), col = "red")
+text(3.5, 0.1, round(prob, digits = 4))
+```
+
 - Calcula y grafica la probabilidad de que $Q$ sea 3 o menor
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+prob2 <- pf(3,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "P(X < 3)") #función de prob
+x <- seq(0, 3, 0.01)
+polygon(c(0, x, 3), c(0, df(x, 4, 20), 0), col = "red")
+text(0.5, 0.2, round(prob2, digits = 4))
+```
+
 - Calcula y grafica la probabilidad de que $Q$ sea 4 o mayor
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+prob3 <- pf(4,4,20,lower.tail = FALSE)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "P(X > 4)") #función de prob
+x <- seq(4, 7, 0.01)
+polygon(c(4, x, 7), c(0, df(x, 4, 20), 0), col = "red")
+text(4.5, 0.1, round(prob3, digits = 4))
+```
+
 - Calcula y grafica el percentil $0.95$ de $Q$
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+perc95 <- qf(.95,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "Percentil 95%") #función de prob
+x <- seq(0, perc95, 0.01)
+polygon(c(0, x, perc95), c(0, df(x, 4, 20), 0), col = "red")
+text(0.5, 0.2, round(.95, digits = 4))
+```
+
+
 - Calcula y grafica el percentil $0.5$ de $Q$
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+perc05 <- qf(.05,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "Percentil 5%") #función de prob
+x <- seq(0, perc05, 0.01)
+polygon(c(0, x, perc05), c(0, df(x, 4, 20), 0), col = "red")
+text(0.5, 0.2, round(.05, digits = 4))
+```
+
 
 # Ejercicio 4
 Una franquicia quiere determinar si existe diferencia entre la satisfacción de los clientes en los establecimientos de dos de sus franquiciatarios y para ello recolecta datos en 15 establecimientos de cada uno:
