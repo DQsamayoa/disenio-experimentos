@@ -49,10 +49,87 @@ Se sabe que la pagina web de una famosa tienda departamental tiene un tiempo de 
 Teniendo $\mathrm{T}$ una variable aleatoria t-student centrada en $0$ y con $13 \mathrm{gl}$.
 
 - Calcula y grafica la probabilidad de que T este en el intervalo $\left[-1, 1 \right]$
+```{r fig2_1, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-1, seq(-1, 1, 0.01), 1) 
+cord.y <- c(0, dt(seq(-1, 1, 0.01), 13), 0) 
+curve(dt(x, 13), 
+      xlim=c(-4, 4),
+      main=bquote('Probabilidad de que' ~ (T[13] >= -1 ~ "y"~   T[13] <= 1)),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = pt(-1, 13) + 1- pt(1, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+
+```
+
 - Calcula y grafica la probabilidad de que T sea menor o igual a $2.16$
+```{r fig2_2, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-4, seq(-4, 2.16, 0.01), 2.16) 
+cord.y <- c(0, dt(seq(-4, 2.16, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main=bquote('Probabilidad de que' ~ T[13] <= 2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = pt(2.16, 13) 
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+```
+
 - Calcula y grafica la probabilidad de que T sea igual o mayor a $2.16$
+```{r fig2_3, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(2.16, seq(2.16, 4, 0.01), 4) 
+cord.y <- c(0, dt(seq(2.16, 4, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main=bquote('Probabilidad de que' ~ T[13] >= 2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = 1- pt(2.16, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+
+```
+
 - Calcula y grafica la probabilidad de que T sea menor o igual a $-2.16$
+```{r fig2_4, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-4, seq(-4, -2.16, 0.01), -2.16) 
+cord.y <- c(0, dt(seq(-4, -2.16, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main=bquote('Probabilidad de que' ~ T[13] <= -2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = pt(-2.16, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+```
+
 - Calcula y grafica la probabilidad de que T sea igual o mayor a $-2.16$
+```{r fig2_5, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-2.16, seq(-2.16, 4, 0.01), 4) 
+cord.y <- c(0, dt(seq(-2.16, 4, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main= bquote('Probabilidad de que' ~ T[13] >= -2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = 1- pt(-2.16, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+```
 
 
 # Ejercicio 3
