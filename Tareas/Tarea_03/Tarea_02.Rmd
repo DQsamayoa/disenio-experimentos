@@ -1,0 +1,435 @@
+---
+title: "Métodos de diseño y Análisis de Experimentos"
+subtitle: "Tarea 02"
+author:
+  - "Rivera Torres Francisco de Jesús"
+  - "Rodríguez Maya Jorge Daniel"
+  - "Samayoa Donado Víctor Augusto"
+  - "Trujillo Bariios Georgina"
+date: "Marzo 05, 2019"
+output:
+  pdf_document:
+    toc: false
+    number_sections: true
+    fig_caption: true
+    highlight: kate
+    df_print: kable
+    includes:
+      in_header: tex/header.tex
+fontsize: 11pt
+documentclass: article
+classoption: twoside
+fig_align: "center"
+---
+
+```{r setup, include = FALSE, eval = TRUE}
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE, fig.height = 3)
+
+# Se cargan las librerias a utilizar
+library(tidyverse)
+library(readxl)
+library(scales)
+library(grid)
+library(kableExtra)
+library(latex2exp)
+```
+
+
+# Ejercicio 1
+Se sabe que la pagina web de una famosa tienda departamental tiene un tiempo de carga en segundos que se distribuye Normal  $\left(\mu = 5, \sigma^2 = 4 \right)$
+
+- Calcula y grafica la probabilidad de que la página tarde entre 4 y 6 segundos en cargar.
+
+```{r}
+
+# Se definen parámetros
+mu<- 5
+sigma<- 2
+
+
+#Calcula y grafica a)
+
+x1<-4
+x2<-6
+
+#Gráfica de la distribución normal.
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+#El área bajo la curva de la probabilidad que la página tarde entre 4 y 6 seg 
+# en cargar
+
+cord.c = c(x1, seq(x1,x2,0.01),x2)
+cord.d = c(0, dnorm(seq(x1,x2,0.01), mu, sigma), 0)
+polygon(cord.c, cord.d, col = "red")
+
+#La probabilidad de que la página tarde entre 4 y 6 s en cargar
+#P
+x<- pnorm(6, mu, sigma)- pnorm(4, mu, sigma)
+x
+
+```
+
+De esta manera la probabilidad de que la página tarde en cargar entre 4 y 6 
+segundos es de $P(4 \leq x \leq6) = 0.3829$
+  
+  
+- Calcula y grafica la probabilidad de que la página cargue máximo en 4 segundos.
+
+```{r}  
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+
+cord.a = c(0, seq(min(range),x1,0.01),x1)
+cord.b = c(0, dnorm(seq(min(range),x1,0.01), mu, sigma), 0)
+polygon(cord.a, cord.b, col = "blue")
+
+#Calculando la probabilidad P(x <= 4)
+pnorm(4, mu, sigma)
+
+```
+
+La probabilidad de que tarde máximo 4 segundos es
+$P(x \leq 4) = 0.308$
+  
+
+- Calcula y grafica la probabilidad de que la página tarde 6 segundos o más en cargar.
+
+```{r}
+#Probabilidad de que tarde 6 seg
+#Gráfica de la distribución normal.
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+#El área bajo la curva de la probabilidad que la página tarde entre 4 y 6 seg 
+# en cargar
+
+cord.c = c(0, seq(min(range),x2,0.01),x2)
+cord.d = c(0, dnorm(seq(min(range),x2,0.01), mu, sigma), 0)
+polygon(cord.c, cord.d, col = "red")
+
+#La probabilidad de que la página tarde entre 4 y 6 s en cargar
+#P
+s<- 1- pnorm(6, mu, sigma)
+s
+
+```
+- Calcula y grafica el mínimo que tarda en cargar la página el $5\%$ de las veces que carga mas lenta.
+
+```{r}
+
+#Calcular el mínimo que tarda en cargar el 5% de las veces que carga más lento 
+  
+qnorm(0.95, mu, sigma)
+
+z = 8.2
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+
+cord.a = c(0, seq(min(range), z ,0.01),z)
+cord.b = c(0, dnorm(seq(min(range),z ,0.01), mu, sigma), 0)
+polygon(cord.a, cord.b, col = "green")
+
+1 - pnorm(8.2, mu, sigma)
+
+
+```
+
+Por lo que la probabilidad es $P(x=8.2)=$ `r 1 - pnorm(8.2, mu, sigma)`.
+
+- Calcula y grafica cuál es el máximo que tarda en cargar la página el $10\%$ de las veces que lo hace más rápido.
+
+```{r}
+
+#Calcular el máximo 
+
+qnorm(0.10, mu, sigma)
+
+
+z2 = 2.4
+range= seq(mu-3*sigma, mu+3*sigma,0.01)
+y=dnorm(range, mu, sigma)
+plot(range, y, main = , type= 'l', ylim=c(0,max(y)+0.01), axes= TRUE)
+axis(1, at = seq(mu - 3*sigma, mu + 3*sigma,sigma))
+
+
+cord.a = c(0, seq(min(range), z2 ,0.01),z2)
+cord.b = c(0, dnorm(seq(min(range),z2 ,0.01), mu, sigma), 0)
+polygon(cord.a, cord.b, col = "green")
+
+pnorm(2.4, mu, sigma)
+
+
+```
+
+# Ejercicio 2
+Teniendo $\mathrm{T}$ una variable aleatoria t-student centrada en $0$ y con $13 \mathrm{gl}$.
+
+- Calcula y grafica la probabilidad de que T este en el intervalo $\left[-1, 1 \right]$
+```{r fig2_1, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-1, seq(-1, 1, 0.01), 1) 
+cord.y <- c(0, dt(seq(-1, 1, 0.01), 13), 0) 
+curve(dt(x, 13), 
+      xlim=c(-4, 4),
+      main=bquote('Probabilidad de que' ~ (T[13] >= -1 ~ "y"~   T[13] <= 1)),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = pt(-1, 13) + 1- pt(1, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+
+```
+
+- Calcula y grafica la probabilidad de que T sea menor o igual a $2.16$
+```{r fig2_2, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-4, seq(-4, 2.16, 0.01), 2.16) 
+cord.y <- c(0, dt(seq(-4, 2.16, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main=bquote('Probabilidad de que' ~ T[13] <= 2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = pt(2.16, 13) 
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+```
+
+- Calcula y grafica la probabilidad de que T sea igual o mayor a $2.16$
+```{r fig2_3, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(2.16, seq(2.16, 4, 0.01), 4) 
+cord.y <- c(0, dt(seq(2.16, 4, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main=bquote('Probabilidad de que' ~ T[13] >= 2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = 1- pt(2.16, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+
+```
+
+- Calcula y grafica la probabilidad de que T sea menor o igual a $-2.16$
+```{r fig2_4, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-4, seq(-4, -2.16, 0.01), -2.16) 
+cord.y <- c(0, dt(seq(-4, -2.16, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main=bquote('Probabilidad de que' ~ T[13] <= -2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = pt(-2.16, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+```
+
+- Calcula y grafica la probabilidad de que T sea igual o mayor a $-2.16$
+```{r fig2_5, fig.height = 3, fig.width = 5, fig.align = "left"}
+cord.x <- c(-2.16, seq(-2.16, 4, 0.01), 4) 
+cord.y <- c(0, dt(seq(-2.16, 4, 0.01), 13), 0) 
+curve(dt(x, 13), xlim=c(-4, 4), 
+      main= bquote('Probabilidad de que' ~ T[13] >= -2.16),
+      sub= "T-student (13 grados de lib, centrada en 0)",
+      xlab = "cuantil",
+      ylab = "densidad",
+      cex.main=1.5, cex.lab=1, cex.sub=0.8,
+      lwd = 1.5)
+polygon(cord.x, cord.y, col='purple')
+prob = 1- pt(-2.16, 13)
+legend("topright", legend = paste0("Prob = ", round(prob, 4)))
+```
+
+
+# Ejercicio 3
+Teniendo una variable aleatoria $Q$ que se distribuye $\mathrm{F}$ con parámetros $\left(4, 20 \right)$
+
+- Calcula y grafica la probabilidad de que $Q$ este en el intervalo $\left[ 3, 4 \right]$
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+prob <- pf(4,4,20)-pf(3,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "P(3 < X < 4)") #función de prob
+x <- seq(3, 4, 0.01)
+polygon(c(3, x, 4), c(0, df(x, 4, 20), 0), col = "red")
+text(3.5, 0.1, round(prob, digits = 4))
+```
+
+- Calcula y grafica la probabilidad de que $Q$ sea 3 o menor
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+prob2 <- pf(3,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "P(X < 3)") #función de prob
+x <- seq(0, 3, 0.01)
+polygon(c(0, x, 3), c(0, df(x, 4, 20), 0), col = "red")
+text(0.5, 0.2, round(prob2, digits = 4))
+```
+
+- Calcula y grafica la probabilidad de que $Q$ sea 4 o mayor
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+prob3 <- pf(4,4,20,lower.tail = FALSE)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "P(X > 4)") #función de prob
+x <- seq(4, 7, 0.01)
+polygon(c(4, x, 7), c(0, df(x, 4, 20), 0), col = "red")
+text(4.5, 0.1, round(prob3, digits = 4))
+```
+
+- Calcula y grafica el percentil $0.95$ de $Q$
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+perc95 <- qf(.95,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "Percentil 95%") #función de prob
+x <- seq(0, perc95, 0.01)
+polygon(c(0, x, perc95), c(0, df(x, 4, 20), 0), col = "red")
+text(0.5, 0.2, round(.95, digits = 4))
+```
+
+
+- Calcula y grafica el percentil $0.5$ de $Q$
+```{r, fig.height = 3, fig.width = 5, fig.align = "left"}
+perc05 <- qf(.05,4,20)
+curve(df(x, 4, 20), col = "blue", lwd=2, xlim = c(0, 7), yaxs = "i", ylim = c(0, 0.8),
+      ylab = "F(4, 20)", main = "Percentil 5%") #función de prob
+x <- seq(0, perc05, 0.01)
+polygon(c(0, x, perc05), c(0, df(x, 4, 20), 0), col = "red")
+text(0.5, 0.2, round(.05, digits = 4))
+```
+
+
+# Ejercicio 4
+Una franquicia quiere determinar si existe diferencia entre la satisfacción de los clientes en los establecimientos de dos de sus franquiciatarios y para ello recolecta datos en 15 establecimientos de cada uno:
+
+```{r}
+datos4 <- tibble(f1 = c(6.721351,  6.323979,  4.128115,  9.593806, 11.176376,  5.460104, 2.517744,  9.186292,  4.235253, 8.824826,  5.568107,  6.794284, 5.670497,  8.418545,  5.995717),
+                 f2 = c(8.3162646,  2.8591867, 12.9495849,  5.5420510,  3.8361638,  1.1963828,  4.8126178,  1.8920791, 6.1332265, 10.1599013, 5.9033151,  0.5051285,  0.4907579,  4.6517146,  7.0236920))
+
+datos <- datos4
+
+datos4 %>% 
+  knitr::kable(format = "latex", booktabs = TRUE, longtable = TRUE, linesep = "",
+               #escape = FALSE, #digits = 2,
+               caption = "Promedio de satisfacción de los clientes por establecimiento.",
+               col.names = c("Franquiciatario 1", "Franquiciatario 2")) %>% 
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) %>% 
+  kableExtra::footnote(general = "Donde 0 es completamente insatisfecho y 15 completamente satisfecho",
+                       general_title = "Nota: ", threeparttable = TRUE)
+```
+
+- Escribe la hipótesis nula y la hipótesis alternativa
+
+Consideremos como $\mu_i$ la media de satisfacción de los clientes en los establecimeintos del franquiciatario $i$, $i = 1, 2$. Entonces la hipótesis nula $\left( \mathrm{H}_0 \right)$ y la hipótesis alternativa $\left( \mathrm{H}_a \right)$ quedan como sigue:
+\begin{align*}
+\mathrm{H}_0 : \mu_1 - \mu_2 = 0 \qquad \text{v.s.} \qquad \mathrm{H}_a : \mu_1 - \mu_2 \neq 0
+\end{align*}
+
+- Realiza la prueba de hipótesis correspondiente
+
+Procedemos a graficar las distribuciones muestrales de los datos para tener una noción sobre que tan "diferentes" pueden llegar a ser.
+
+```{r}
+datos %>%
+  gather(key = tipo, value = valor, c(f1, f2)) %>% 
+  ggplot(aes(x = valor, color = tipo)) +
+  geom_density() +
+  labs(title = "Distribución muestral de niveles de satisfacción en los establecimientos",
+       x = "Nivel de satisfacción",
+       y = "Densidad") +
+  scale_x_continuous(breaks = seq(from = 0, to = 15, by = 1)) +
+  scale_color_manual(name = "Franquiciatario", labels = c(1, 2), values = c("steelblue", "firebrick")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.position = "top")
+```
+
+
+Primero, se procede a realizar una prueba de hipótesis para la igualdad de varianzas (ya que necesitamos saber si la comparación de las medias se realizará con varianzas desconocidas iguales o distintas),
+
+El planteamiento de hipótesis para igualdad de varianzas está dado por:
+\begin{align*}
+\mathrm{H}_0 : \dfrac{\sigma_y^2}{\sigma_x^2} = 1 \qquad \text{v.s.} \qquad \mathrm{H}_a : \dfrac{\sigma_y^2}{\sigma_x^2} \neq 1
+\end{align*}
+donde la región de rechazo está dada por
+\begin{align*}
+C = \left\lbrace x \in X \left| \left( \dfrac{\dfrac{1}{n_1} \sum_{i = 1}^{n_1} (y_i - \mu_y)^2}{\dfrac{1}{n_2} \sum_{i = 1}^{n_2} (x_i - \mu_x)^2} \right) > F^{1 - \nicefrac{\alpha}{2}}_{(n_1-1, n_2-1)} \right. \right\rbrace
+\end{align*}
+donde $\alpha = 0.1$ para una confianza del $90\%$ y $n_1 = n_2 = `r nrow(datos4)`$.
+
+Calculando el estadístico se tiene que .
+```{r, echo = TRUE}
+alpha <- 0.1
+
+n1 <- nrow(datos)
+n2 <- nrow(datos)
+
+est.f <- qf(1 - alpha, df1 = n1 - 1, df2 = n2 - 1)
+```
+obteniendo así un valor de $F^{1-\nicefrac{\alpha}{2}}_{(n_1-1, n_2-1)} = `r est.f`$.
+
+Realizando los cálculos para la región de rechazo, se obtiene que 
+```{r, echo = TRUE}
+library(tidyverse)
+
+x <- datos %>% 
+     pull(f1)
+y <- datos %>% 
+     pull(f2)
+
+var_f1 <- sum((y - mean(y))^2)/n1
+var_f2 <- sum((x - mean(x))^2)/n2
+
+f <- var_f1/var_f2
+```
+\begin{align*}
+\left( \dfrac{\dfrac{1}{n_1} \sum_{i = 1}^{n_1} (y_i - \mu_y)^2}{\dfrac{1}{n_2} \sum_{i = 1}^{n_2} (x_i - \mu_x)^2} \right) = `r f`
+\end{align*}
+
+En este caso observamos que:
+\begin{align*}
+`r f` = \left( \dfrac{\dfrac{1}{n_1} \sum_{i = 1}^{n_1} (y_i - \mu_y)^2}{\dfrac{1}{n_2} \sum_{i = 1}^{n_2} (x_i - \mu_x)^2} \right) > F^{1-\nicefrac{\alpha}{2}}_{(n_1-1, n_2-1)} = `r est.f`
+\end{align*}
+por lo tanto se rechaza la hipótesis nula de que ambas poblaciones tienen varianza igual. Es decir, consideramos que las poblaciones (establecimientos de franquiciatario 1 y establecimientos de franquiciatario 2) tienen varianza distinta.
+
+Con lo anterior, se procede a realizar una prueba de hipótesis bilateral (de dos colas), para las medias de ambas poblaciones (establecimientos de franquiciatario 1 y establecimientos de franquiciatario 2).
+
+```{r, echo = TRUE}
+test4 <- t.test(x, y, alternative = "two.sided", paired = FALSE,
+                conf.level = 0.9, var.equal = FALSE, conf.int = TRUE)
+
+test4
+```
+
+En este caso observamos que $\mathrm{p-value} > 0.1 = \alpha$
+
+- Construye el intervalo de confianza para la diferencia de medias usando un nivel de confianza de $90\%$
+
+El intervalo de confianza está dado por:
+```{r, echo = TRUE}
+test4$conf.int
+```
+
+```{r}
+conf_int <- test4$conf.int
+```
+
+En este caso observamos que $0 \in \left( `r round(conf_int[1], 2)`, `r round(conf_int[2], 2)` \right)$
+
+- Concluye
+
+Lo anterior nos indica que, con una cofianza del $90\%$, podemos afirmar que el nivel de satisfacción, en promedio, que proporcionan los establecimientos de ambos franquiciatarios es el mismo.
