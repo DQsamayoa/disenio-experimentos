@@ -26,7 +26,7 @@ fig_align: "center"
 knitr::opts_chunk$set(echo = FALSE, eval = TRUE, fig.height = 3)
 
 # Se cargan las librerias a utilizar
-# library(tidyverse)
+library(tidyverse)
 library(readxl)
 library(scales)
 library(grid)
@@ -38,7 +38,7 @@ library(latex2exp)
 # Ejercicio 1
 Teniendo un diseño completamente al azar, unifactorial, de efectos fijos con 3 tratamientos y 4 repeticiones para cada uno.
 
-## 1.1	 Completa todos los espacios vacios de la tabla de ANOVA:
+## Completa todos los espacios vacios de la tabla de ANOVA:
 
 \begin{table}[H]
 \caption{Tabla ANOVA}
@@ -55,24 +55,139 @@ Total       & n-1 = 11  &        &         &          &          \\
 \end{tabular}
 \end{table}
 
-## 1.2	 ¿Cuál es el modelo? 
+## ¿Cuál es el modelo? 
 
 $y_{i,j} = \mu_{i} +  e_{i,j}$
 
 
-## 1.3	 ¿Cuál es la hipótesis nula?     
+## ¿Cuál es la hipótesis nula?     
 
 $H_{0}: \mu_{1} =  \mu_{2} =  \mu_{3}$
 
-## 	1.4 Con un nivel de significancia $\alpha =.01$, ¿qué cuantil de la distribución $F$ usarías para determinar la zona de rechazo?¿Rechazarías $H_{0}?
+## Con un nivel de significancia $\alpha =.01$, ¿qué cuantil de la distribución $F$ usarías para determinar la zona de rechazo?¿Rechazarías $H_{0}?
 
 
 
-## 	1.5 Con un nivel de significancia $\alpha =.05$, ¿qué cuantil de la distribución $F$ usarías para determinar la zona de rechazo?¿Rechazarías $H_{0}?
+## Con un nivel de significancia $\alpha =.05$, ¿qué cuantil de la distribución $F$ usarías para determinar la zona de rechazo?¿Rechazarías $H_{0}?
 
 # Ejercicio 2
 Se quiere contrastar la efectividad de 3 diferentes repelentes para insectos, para hacerlo se corrió un pequeño experimento con 12 viajeros de una excursión al Amazonas, aleatoriamente se determinó qué repelente se aplicaría cada viajero y al final del viaje se contó el número de piquetes que cada uno tenía.
 
+```{r}
+ejercicio3 <- tibble(viajero = seq(from = 1, to = 12, by = 1),
+                     repelente = c(rep("UXM", times = 3), rep("JFH-1", times = 3),
+                                   rep("K300", times = 3), rep("Placebo", times = 3)),
+                     piquetes = c(3, 1, 2, 6, 6, 9, 2, 4, 0, 7, 9, 5))
+```
+
+```{r}
+ejercicio3 %>% 
+  knitr::kable(format = "latex", booktabs = TRUE, longtable = TRUE, linesep = "",
+               escape = TRUE, digits = 2,
+               col.names = c("Viajero", "Repelente", "# Piquetes")) %>% 
+  row_spec(0, align = "c") %>% 
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header"))
+```
+
+Responde lo siguiente:
+
+## ¿Cuántos factores son? ¿Cuántos tratamientos se tienen? y ¿Cuántas repeticiones se hicieron para cada tratamiento?
+
+En los datos existe un único factor **Repelente**. Hay 4 niveles para este factor y como es un único factor se tiene que los niveles son los tratamientos, los cuales son; **UMC**, **JFH-1**, **K300** y **Placebo**. Y se realizaron 3 repeticiones por cada uno de los tratamientos
+
+## ¿Cuál es la unidad experimental? y ¿Cuál es la variable respuesta?
+
+La unidad experiemntal (u.e.) son los **viajeros** y la variable respuesta es el **número de piquetes** en cada viajero.
+
+## ¿Cuál sería la pregunta de investigación?
+
+¿Alguno de los repelentes reduce el número de piquetes en comparación con otros?
+
+## Describe el modelo de efectos y cada uno de sus elementos
+
+Debido a que solamente se tiene un factor, el modelo de efectos es el modelo de medias
+\begin{align*}
+y_{ij} &= \mu_i + \varepsilon_{ij}
+\end{align*}
+donde:
+\begin{align*}
+j &= \text{viajero} = 1, 2, 3. & i &= \text{UMC, JFH-1, K-300, Placebo} \\
+\varepsilon_{ij} &= \text{error experimental unidad } ij, & \mu &= \text{media del i-\'esimo tratamiento} \\
+y_{ij} &= \text{número de piquetes en el viajero } j \text{ del tratamiento } i & &
+\end{align*}
+
+## Especifica los supuestos y las hipótesis
+
+Para este modelo se tienen los siguientes supuestos:
+
+- Existe una población de referencia para cada unidad experimental.
+- La variable respuesta de cada unidad de la población (los viajeros) tiene una media $\mu$ y una varianza $\sigma^2$.
+- Las unidades observadas se seleccionaron de forma aleatoria para cada población.
+
+Las hipótesis son:
+\begin{align*}
+H_0 : \mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu \qquad
+\text{v.s.} \qquad
+H_a &: \mu_i \neq \mu_k, \text{ para alguna } i \neq k
+\end{align*}
+
+## Obtén una tabla ANOVA con los datos
+
+```{r}
+options(knitr.kable.NA = '')
+modelo <- ejercicio3 %>% 
+          lm(formula = piquetes ~ repelente)
+
+tbl_anova <- anova(modelo)
+
+tbl_anova %>% 
+  as_tibble() %>% 
+  bind_rows(summarise_all(tbl_anova, sum)) %>% 
+  mutate(fv = c("Repelente", "Error", "Total")) %>% 
+  mutate(`Mean Sq` = if_else(fv == "Total", as.double(NA), `Mean Sq`)) %>% 
+  select(fv, Df, `Sum Sq`, `Mean Sq`, `F value`, `Pr(>F)`) %>% 
+  knitr::kable(format = "latex", booktabs = TRUE, longtable = TRUE, linesep = "",
+               escape = TRUE, digits = 4, 
+               caption = "Tabla ANOVA",
+               col.names = c("F.V", "g.l", "SS", "CM", "F", "Pr(>F)")) %>% 
+  row_spec(0, align = "c") %>% 
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header"))
+```
+
+## ¿Qué conclusión puedes sacar de la ANOVA?
+
+De la tabla ANOVA, se observa que el p-value $= 0.00763 < 0.01 = \alpha$. Por lo tanto, a un nivel de significancia de $\alpha = 0.01$ se rechaza la hipótesis nula. Por lo que existe algún repelente que tiene un comportamiento diferente al promedio.
+
+## Analiza la diferencia entre pares usando Tukey
+
+```{r}
+tuk <- ejercicio3 %>% 
+        aov(formula = piquetes ~ repelente) %>% 
+        TukeyHSD(ordered = TRUE)
+
+tuk$repelente %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as_tibble() %>% 
+  arrange(diff) %>% 
+  knitr::kable(format = "latex", booktabs = TRUE, longtable = TRUE, linesep = "",
+               escape = TRUE, digits = 4, 
+               caption = "Tabla TukeyHSD",
+               col.names = c("Repelente", "Diferencias", "Inferior", "Superior", "p ajustada")) %>% 
+  row_spec(0, align = "c") %>% 
+  add_header_above(c("", "", "Intervalo de confianza" = 2, "")) %>%
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header"))
+```
+
+## Esquematiza la comparación de pares en un cuadro
+
+
+
+## ¿Qué puedes concluir?
+
+Las poblaciones de los viajeros que usaron los repelentes **UXM-300** y **K300** tienen la misma media, esto es, ambos repelentes tienen el mismo efecto.
+
+Mientras que la población de los viajeros que usaron el repelente **JFH-1** tiene la misma media que los viajeros con **Placebo**
 
 # Ejercicio 3
 Una compañía de pisos desea indagar en la resistencia de 5 diferentes materiales para piso y para ello somete 4 piezas de cada tipo de material a pruebas de resistencia, midiendo el tiempo en segundos que tarda cada material para quebrarse.
