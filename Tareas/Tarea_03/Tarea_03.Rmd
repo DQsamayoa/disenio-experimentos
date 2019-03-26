@@ -5,7 +5,7 @@ author:
   - "Rivera Torres Francisco de Jesús"
   - "Rodríguez Maya Jorge Daniel"
   - "Samayoa Donado Víctor Augusto"
-  - "Trujillo Bariios Georgina"
+  - "Trujillo Barrios Georgina"
 date: "Marzo 26, 2019"
 output:
   pdf_document:
@@ -47,10 +47,10 @@ Teniendo un diseño completamente al azar, unifactorial, de efectos fijos con 3 
 \toprule
 FV          &  GL       & Sum Sq & Mean Sq & F- value & P-value  \\
 \midrule
-Tratamiento & t-1 = 2    &        & F*CME = 0.06583571     &  5.6429  &   .025806 (0.01) / .025806 (0.05)\\
+Tratamiento & t-1=2    & SSt=CMt*(t-1)=0.1317 & F*CME = 0.0658     &  5.643  &   .025806\\
 \midrule
-Error       & n-t = 9    &  CME*(n-t) = 0.105003     & 0.011667&          &          \\
-Total       & n-1 = 11  &        &         &          &          \\
+Error       & n-t=9    & SSE=CME*(n-t)=0.105     & 0.01167&          &          \\
+Total       & n-1=11  & SSt+SSE=0.2366744  &         &          &          \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -66,9 +66,23 @@ $H_{0}: \mu_{1} =  \mu_{2} =  \mu_{3}$
 
 ## Con un nivel de significancia $\alpha =.01$, ¿qué cuantil de la distribución $F$ usarías para determinar la zona de rechazo?¿Rechazarías $H_{0}?
 
+El cuantil que usamos para determinar la zona de rechazo es 
 
+```{r, echo=TRUE}
+cuantil <- qf(0.05, 2,9)
+cuantil
+```
+
+Como este resultado, `r cuantil`  es mayor que el el $p-value$ de la tabla ANOVA, sí rechazaríamos la hipótesis nula: es decir, con $\alpha=0.05$, el efecto de al menos un tratamiento difiere de los otros.
 
 ## Con un nivel de significancia $\alpha =.05$, ¿qué cuantil de la distribución $F$ usarías para determinar la zona de rechazo?¿Rechazarías $H_{0}?
+
+El cuantil que usamos para determinar la zona de rechazo es
+```{r, echo=TRUE}
+cuantil <- qf(0.01, 2,9)
+cuantil
+```
+Como el cuantil, `r cuantil` es menor que el el $p-value$ de la tabla ANOVA, no rechazaríamos la hipótesis nula: es decir, no hay evidencia estadísticamente significativa ($\alpha=0.01$) para afirmar que el efecto promedio de los tratamientos difiere.
 
 # Ejercicio 2
 Se quiere contrastar la efectividad de 3 diferentes repelentes para insectos, para hacerlo se corrió un pequeño experimento con 12 viajeros de una excursión al Amazonas, aleatoriamente se determinó qué repelente se aplicaría cada viajero y al final del viaje se contó el número de piquetes que cada uno tenía.
